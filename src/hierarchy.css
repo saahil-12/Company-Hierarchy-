@@ -1,6 +1,7 @@
 *{
     padding: 0;
     margin: 0;
+    /* #EFF0F6 */
 }
 .main{
     width:100%;
@@ -71,6 +72,21 @@ h5{
     background: #adb2b6;
     padding: 12px;
 
+}
+ 
+/* colour styles */
+.mycolours{
+
+    background-color:  #b9dbf1;
+    background-color: #0b4d7a;
+    background-color: #052b45;
+
+
+    background-color:  #29558A;
+    /* header */
+    background-color:  #d5dbe6;
+    background-color:  #6b8bb5;
+    background-color:  #9aafcc;
 }
 
 /* Style for the table */

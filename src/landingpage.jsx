@@ -94,6 +94,7 @@ export default function Landing() {
                 value={selectedCompany}
                 onChange={(e) => setSelectedCompany(e.target.value)}
               >
+                <option value="">Select Company</option>
                 {companies.map((item) => {
                   return <option value={item}>{item}</option>;
                 })}
