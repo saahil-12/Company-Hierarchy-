@@ -5,6 +5,7 @@ import Tree from "./hierarchy"
 // import CreateNewUSer from './createNewUser'
 import Dashboard from './dashboard';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import CreateUser from './createUser';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path:'/dashboard',
     element:<Dashboard/>
+  },
+  {
+    path:'/createuser',
+    element:<CreateUser/>
   }
 ]);
 

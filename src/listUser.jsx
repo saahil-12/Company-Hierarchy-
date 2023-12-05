@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 
-export default function ListUser({ show }) {
+export default function ListUser({show}) {
   const [users, setUsers] = useState([]);
   const [localData, setLocalData] = useState([]);
 
@@ -56,7 +56,7 @@ export default function ListUser({ show }) {
         <div className="user-management-h3">
           <button
             className="createuserbutton"
-            onClick={() => show("createUser")}
+            onClick={() => show("createUser")} 
           >
             Create User
           </button>

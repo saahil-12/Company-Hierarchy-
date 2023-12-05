@@ -38,7 +38,7 @@ export default function Tree() {
           ) : show == "listUser" ? (
             <ListUser show={setShow} />
           ) : (
-            <CreateUser />
+            <CreateUser show={setShow} />
           )}
         </div>
       </div>

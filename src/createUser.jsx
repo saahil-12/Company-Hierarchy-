@@ -1,28 +1,69 @@
+import React, { useState, useEffect } from "react";
 import "./signup.css";
-import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+// import { useNavigate } from "react-router-dom";
 
-export default function CreateUser() {
-  const [userData, setuserData] = useState({
+export default function CreateUser({ show }) {
+  const [userData, setUserData] = useState({
     name: "",
     id: 0,
     role: "",
     branch: "",
-    status:false,
+    status: false,
     children: [],
   });
+
+  useEffect(() => {
+    let storedData = localStorage.getItem("formData");
+    storedData = storedData ? JSON.parse(storedData) : [];
+    const userCookie = Cookies.get("user");
+    let formatted = JSON.parse(userCookie);
+    const userId = formatted ? formatted.id : 0;
+
+    function getAllBranches(data) {
+      let branches = [];
+
+      function traverse(node) {
+        if (node.role) {
+          branches.push(node.role);
+        }
+
+        if (node.children && node.children.length > 0) {
+          node.children.forEach(traverse);
+        }
+      }
+
+      if (data) {
+        data.forEach(traverse);
+      }
+
+      return branches;
+    }
+
+    let temp = storedData.filter((item) => {
+      return item.id == userId;
+    });
+
+    if (temp.length > 0) {
+      const allBranches = getAllBranches(temp[0].children);
+      setSelectedBranches(allBranches);
+    }
+  }, []);
+
+  const [selectedRoles, setSelectedRoles] = useState([]);
+  const [selectedBranches, setSelectedBranches] = useState([]);
 
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setuserData({ ...userData, [name]: value });
+    setUserData({ ...userData, [name]: value });
   };
 
   const validateForm = () => {
     const newErrors = {};
     if (!userData.name?.length) {
-      newErrors.name = "please enter your name";
+      newErrors.name = "Please enter your name";
     }
     if (!userData.branch) {
       newErrors.branch = "Please select a branch";
@@ -31,13 +72,13 @@ export default function CreateUser() {
       newErrors.role = "Please select a role";
     }
     if (!userData.password?.length) {
-      newErrors.password = "please enter a password";
+      newErrors.password = "Please enter a password";
     }
     if (
       !userData.confirmPassword?.length ||
       userData.confirmPassword !== userData.password
     ) {
-      newErrors.confirmPassword = "passwords donot match";
+      newErrors.confirmPassword = "Passwords do not match";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -49,6 +90,8 @@ export default function CreateUser() {
     const userId = formatted ? formatted.id : 0;
   }, []);
 
+  // working  upto ceo
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = validateForm();
@@ -59,14 +102,41 @@ export default function CreateUser() {
       const userCookie = Cookies.get("user");
       let formatted = JSON.parse(userCookie);
       const userId = formatted ? formatted.id : 0;
-      storedData.map((item) => {
-        if (item.id == userId) {
-          userData.id = item.children.length + 1;
-          item.children.push(userData);
+      
+      function addChildByBranch(data, newChild) {
+        function traverse(node) {
+          if (node.role.toLowerCase() == newChild.branch.toLowerCase()) {
+            node.children.push(newChild);
+            return true;
+          }
+          if (node.children && node.children.length > 0) {
+            for (const child of node.children) {
+              if (traverse(child)) {
+                return true;
+              }
+            }
+          }
+          return false;
         }
+        data.forEach(traverse);
+        return data;
+      }
+      let index = null;
+      let temp = storedData.filter((item,idx) => {
+         if(item.id == userId){
+          index = idx;
+          return item;
+         }
       });
+      if(temp[0].children.length){
+        let data = addChildByBranch(temp[0].children, userData);
+        console.log(data)
+      }else {
+        storedData[index].children.push(userData);
+      }
       localStorage.setItem("formData", JSON.stringify(storedData));
-      alert("submitted successfully ", userData);
+      alert(`Submitted successfully`);
+      show("listUser");
     }
   };
   return (
@@ -91,17 +161,28 @@ export default function CreateUser() {
               onChange={handleChange}
             >
               <option value="select branch">Select Branch</option>
-              <option value="ceo">CEO</option>
-              <option value="cto">CTO</option>
-              <option value="Manager">Manager</option>
-              <option value="HR">HR</option>
-              <option value="Developer">Developer</option>
-              <option value="QA">QA</option>
-              <option value="Designer">Designer</option>
-              <option value="SRE">SRE</option>
-              <option value="Sales and marcketing">Sales and marcketing</option>
-              <option value="Support">Support</option>
-              <option value="Devops">Devops</option>
+              {selectedBranches.map((branch, index) => (
+                <option key={index} value={branch}>
+                  {branch}
+                </option>
+              ))}
+              {!selectedBranches?.length && (
+                <>
+                  <option value="CEO">CEO</option>
+                  <option value="cto">CTO</option>
+                  <option value="Manager">Manager</option>
+                  <option value="HR">HR</option>
+                  <option value="Developer">Developer</option>
+                  <option value="QA">QA</option>
+                  <option value="Designer">Designer</option>
+                  <option value="SRE">SRE</option>
+                  <option value="Sales and marcketing">
+                    Sales and marcketing
+                  </option>
+                  <option value="Support">Support</option>
+                  <option value="Devops">Devops</option>
+                </>
+              )}
             </select>
             {errors.branch && <span className="error">{errors.branch}</span>}
           </div>
@@ -113,9 +194,13 @@ export default function CreateUser() {
               onChange={handleChange}
               placeholder="select role"
             >
-              <option value="Select Role">Select Role</option>
-              <option value="ceo">CEO</option>
-              <option value="cto">CTO</option>
+              <option value="">Select Role</option>
+              <option value="ceo" disabled={selectedRoles.includes("ceo")}>
+                CEO
+              </option>
+              <option value="cto" disabled={selectedRoles.includes("cto")}>
+                CTO
+              </option>
               <option value="Front-end-Developer">Front-end-Developer</option>
               <option value="Back-end-Developer">Back-end-Developer</option>
               <option value="UI UX designer">UI UX</option>
