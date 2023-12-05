@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 
-export default function ListUser({show}) {
+export default function ListUser({ show }) {
   const [users, setUsers] = useState([]);
   const [localData, setLocalData] = useState([]);
 
@@ -13,12 +13,35 @@ export default function ListUser({show}) {
       const userCookie = Cookies.get("user");
       let formatted = JSON.parse(userCookie);
       const userId = formatted ? formatted.id : 0;
-      parsedData.map((item) => {
-        if (item.id == userId) {
-          setUsers([...item.children]);
-        }
-      });
+      // parsedData.map((item) => {
+      //   if (item.id == userId) {
+      //     setUsers([...item.children]);
+      //   }
+      // });
       setLocalData(parsedData);
+      function getAllBranches(data) {
+        let branches = [];
+        function traverse(node) {
+          if (node.children?.length) {
+            branches = [...branches,...node.children];
+          }
+          if (node.children && node.children.length > 0) {
+            node.children.forEach(traverse);
+          }
+        }
+        if (data) {
+          data.forEach(traverse);
+        }
+        return branches;
+      }
+      let temp = parsedData.filter((item) => {
+        return item.id == userId;
+      });
+      if (temp.length > 0) {
+        const allBranches = getAllBranches(temp);
+        setUsers(allBranches);
+        console.log(allBranches)
+      }
     }
   }, []);
 
@@ -27,8 +50,7 @@ export default function ListUser({show}) {
     let formatted = JSON.parse(userCookie);
     const userId = formatted ? formatted.id : 0;
 
-
-    let temp = [...users]
+    let temp = [...users];
     temp.map((item) => {
       if (item.id == id) {
         item.status = !item.status;
@@ -36,17 +58,16 @@ export default function ListUser({show}) {
     });
     setUsers([...temp]);
 
-    const updatedStatus = localData.map((item)=>{
-      if (item.id===id){
-        item.status=true;
+    const updatedStatus = localData.map((item) => {
+      if (item.id === id) {
+        item.status = true;
       }
       return item;
     });
-      localStorage.setItem("formData",JSON.stringify(updatedStatus));
-      console.log(updatedStatus)
+    localStorage.setItem("formData", JSON.stringify(updatedStatus));
+    console.log(updatedStatus);
   };
 
-  
   return (
     <>
       <div className="user-management">
@@ -56,7 +77,7 @@ export default function ListUser({show}) {
         <div className="user-management-h3">
           <button
             className="createuserbutton"
-            onClick={() => show("createUser")} 
+            onClick={() => show("createUser")}
           >
             Create User
           </button>

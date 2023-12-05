@@ -4,6 +4,8 @@ import Cookies from "js-cookie";
 // import { useNavigate } from "react-router-dom";
 
 export default function CreateUser({ show }) {
+  const [selectedRoles, setSelectedRoles] = useState([]);
+  const [selectedBranches, setSelectedBranches] = useState([]);
   const [userData, setUserData] = useState({
     name: "",
     id: 0,
@@ -50,8 +52,6 @@ export default function CreateUser({ show }) {
     }
   }, []);
 
-  const [selectedRoles, setSelectedRoles] = useState([]);
-  const [selectedBranches, setSelectedBranches] = useState([]);
 
   const [errors, setErrors] = useState({});
 
@@ -90,7 +90,6 @@ export default function CreateUser({ show }) {
     const userId = formatted ? formatted.id : 0;
   }, []);
 
-  // working  upto ceo
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -169,7 +168,7 @@ export default function CreateUser({ show }) {
               {!selectedBranches?.length && (
                 <>
                   <option value="CEO">CEO</option>
-                  <option value="cto">CTO</option>
+                  <option value="CTO">CTO</option>
                   <option value="Manager">Manager</option>
                   <option value="HR">HR</option>
                   <option value="Developer">Developer</option>
@@ -195,10 +194,10 @@ export default function CreateUser({ show }) {
               placeholder="select role"
             >
               <option value="">Select Role</option>
-              <option value="ceo" disabled={selectedRoles.includes("ceo")}>
+              <option value="CEO" disabled={selectedRoles.includes("ceo")}>
                 CEO
               </option>
-              <option value="cto" disabled={selectedRoles.includes("cto")}>
+              <option value="CTO" disabled={selectedRoles.includes("cto")}>
                 CTO
               </option>
               <option value="Front-end-Developer">Front-end-Developer</option>
