@@ -13,6 +13,7 @@ export default function CreateUser({ show }) {
     branch: "",
     status: false,
     children: [],
+    images:[],
   });
 
   useEffect(() => {
@@ -65,6 +66,9 @@ export default function CreateUser({ show }) {
     if (!userData.name?.length) {
       newErrors.name = "Please enter your name";
     }
+    if(!userData.images[0]){
+      newErrors.images="please upload an image";
+    }
     if (!userData.branch) {
       newErrors.branch = "Please select a branch";
     }
@@ -90,17 +94,47 @@ export default function CreateUser({ show }) {
     const userId = formatted ? formatted.id : 0;
   }, []);
 
+  const handleImageChange = (e) => {
+    const files = e.target.files;
+    const updatedImages = [...userData.images];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        updatedImages.push(reader.result);
+        setUserData({
+          ...userData,
+          images: updatedImages, // Update the images array in the state
+        });
+      };
+
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    }
+  };
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = validateForm();
 
     if (isValid) {
+
+      const userDataWithImages = {
+        ...userData,
+        // Include the images data in the user data being stored
+      };
+
       let storedData = localStorage.getItem("formData");
       storedData = storedData ? JSON.parse(storedData) : [];
       const userCookie = Cookies.get("user");
       let formatted = JSON.parse(userCookie);
       const userId = formatted ? formatted.id : 0;
+      storedData.push(userDataWithImages);
       
       function addChildByBranch(data, newChild) {
         function traverse(node) {
@@ -138,10 +172,29 @@ export default function CreateUser({ show }) {
       show("listUser");
     }
   };
+
+  const onImageSelect = (event) => {
+     let dom = document.getElementById('profile-image');
+     dom.click();
+     event.preventDefault()
+  }
+
   return (
     <div>
       <div className="form">
         <form onSubmit={handleSubmit}>
+          <div className="input-sec">
+            <label className="input-text">Image</label>
+              <input type="file"
+              style={{display:'none'}}
+              id="profile-image"
+              name="images" 
+              accept="image/*" 
+              multiple onChange={handleImageChange} />
+              <button onClick={(e)=>onImageSelect(e)}>Browse Image</button>
+              <img width={100} src={userData.images[0]}/>
+              {errors.images && <span className="error">{errors.images}</span>}
+          </div>
           <div className="input-sec">
             <label className="input-text">Name</label>
             <input
@@ -200,8 +253,6 @@ export default function CreateUser({ show }) {
               <option value="CTO" disabled={selectedRoles.includes("cto")}>
                 CTO
               </option>
-              <option value="Front-end-Developer">Front-end-Developer</option>
-              <option value="Back-end-Developer">Back-end-Developer</option>
               <option value="UI UX designer">UI UX</option>
               <option value="Product Designer">Product Designer</option>
               <option value="Digital marcketing">Digital marcketing</option>
@@ -213,7 +264,13 @@ export default function CreateUser({ show }) {
               <option value="Systems Engineer">Systems Engineer</option>
               <option value="Performance Engineer">Performance Engineer</option>
               <option value="Release Engineer">Release Engineer</option>
-              <option value="Security Engineer">Security Engineer</option>
+              <option value="HR">HR</option>
+              <option value="QA Analyst">QA Analyst</option>
+              <option value=" Technical Consultant">Technical Consultant</option>
+              <option value="Front-end-Developer">Front-end-Developer</option>
+              <option value="Back-end-Developer">Back-end-Developer</option>
+              <option value="Project Manager">Project Manager</option>
+              <option value=" Support Specialist"> Support Specialist</option>
             </select>
             {errors.role && <span className="error">{errors.role}</span>}
           </div>

@@ -1,0 +1,24 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+.user-managment-image{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+}
+.action-button{
+    padding: 13px;
+    width: 104px;
+    background: #f7f7f7;
+    font-size: 16px;
+}
+.status-bar{
+    width: 120px;
+}
+
+.listing-img{
+    border-radius: 5px;
+}
+

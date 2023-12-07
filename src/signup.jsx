@@ -47,9 +47,9 @@ export default function Signup() {
     ) {
       newErrors.confirmPassword = "passwords donot match";
     }
-    if (!formData.gender) {
-      newErrors.gender = "Please select a gender";
-    }
+    // if (!formData.gender) {
+    //   newErrors.gender = "Please select a gender";
+    // }
     if (!formData.company) {
       newErrors.company = "Please select a company";
     }
@@ -132,7 +132,7 @@ export default function Signup() {
             />
             {errors.email && <span className="error">{errors.email}</span>}
           </div>
-          <div className="input-sec">
+          {/* <div className="input-sec">
             <label className="input-text">Gender</label>
             <select
               name="gender"
@@ -145,7 +145,7 @@ export default function Signup() {
               <option value="others">Others</option>
             </select>
             {errors.gender && <span className="error">{errors.gender}</span>}
-          </div>
+          </div> */}
           <div className="input-sec">
             <label className="input-text">Company</label>
             <input type="text" name="company" value={formData.company}  onChange={handleChange}/>

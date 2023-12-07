@@ -18,14 +18,45 @@
     padding: 10px;
 }
 .headerLayout{
+    display: flex;
+    justify-content: space-between;
     height: 90px;
     background-color: #2A85C3;
     width: 100%;
+    color: black;
+}
+.Logo{
+    background-color: #2A85C3;
+        display: flex;
+        justify-content: flex-start;
+    }
+.header-details{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: black;
+    margin-right: 100px;
+    justify-content: space-evenly;
+    background-color: #2A85C3;
+}
+.headerspan{
+    background: #2A85C3;
+}
+.logout-button{
+    border-radius: 5px;
+    margin: auto;
+    font-size: 15px;
+    width: 100px;
+    background-color: #f7f7f7;
+
 }
 .content{
     display: flex;
     flex-direction: row;
-    height: 88vh;
+    min-height: 100vh;
+    height: auto;
     width:100%;
 }
 .Create-user-button{
@@ -34,6 +65,8 @@
     background-color: aliceblue;
     width: 90%;
     text-align: center;
+    border-radius: 7px;
+
 }
 .Dash-board-button{
     margin: 10px;
@@ -41,6 +74,7 @@
     background-color: aliceblue;
     width: 90%;
     text-align: center;
+    border-radius: 7px;
 }
 .right-layout{
     margin: 3%;
@@ -69,8 +103,9 @@ h5{
     background-color: antiquewhite;
 }
 .createuserbutton{
-    background: #adb2b6;
+    background: #f7f7f7;
     padding: 12px;
+    font-size: 15px;
 
 }
  
