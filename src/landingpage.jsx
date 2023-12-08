@@ -29,15 +29,23 @@ export default function Landing() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    
+
     const user = storedData.find(
       (data) =>
-        data.email === loginData.email && data.password === loginData.password &&  data.company === selectedCompany
+        data.email === loginData.email &&
+        data.password === loginData.password &&
+        data.company === selectedCompany
     );
-console.log(user);
+    console.log(user);
     if (user) {
+      let userCookies = {
+        firstname: user.firstname,
+        lastname: user.lastname,
+        id: user.id,
+        company: user.company
+      };
+      Cookies.set("user", JSON.stringify(userCookies));
       alert(`Welcome back, ${user.firstname} ${user.lastname}!`);
-      Cookies.set("user", JSON.stringify(user));
       navigate("/hierarchy");
     } else {
       alert("Invalid email or password or Company. Please try again.");
@@ -45,7 +53,6 @@ console.log(user);
   };
   let storedData = localStorage.getItem("formData");
   storedData = storedData ? JSON.parse(storedData) : [];
-
 
   return (
     <div>

@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import { BsArrowLeftShort } from "react-icons/bs";
 import { MdDashboard } from "react-icons/md";
 import { FaUserPlus } from "react-icons/fa";
-
-
 import "./hierarchy.css";
-// import metlonelogo from "./assets/metlonelogo.png";
 import Dashboard from "./dashboard";
 import CreateUser from "./createUser";
 import ListUser from "./listUser";
@@ -21,7 +18,7 @@ export default function Tree() {
   console.log(userCookie);
 
   const logoutHandler= ()=>{
-    Cookies.remove('user');
+    Cookies.set('user', '');
     navigate('/')
   }
   return (
@@ -29,8 +26,8 @@ export default function Tree() {
       <div className="headerLayout ">
         <div className="Logo">COMPANY HIERARCHY</div>
         <div className="header-details">
-          <span className="headerspan">Name : {userCookie.firstname+""+userCookie.lastname}</span>
-          <span className="headerspan">Company : {userCookie.company}</span>
+          <span className="headerspan">Name : {userCookie?.firstname+""+userCookie?.lastname}</span>
+          <span className="headerspan">Company : {userCookie?.company}</span>
           <button className="logout-button" onClick={logoutHandler}>Logout</button>
         </div>
       </div>
