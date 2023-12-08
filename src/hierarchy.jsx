@@ -30,7 +30,7 @@ export default function Tree() {
         </div>
       </div>
       <div className="content">
-        <div className="left-layout">
+        <div className="left-layout h-screen p-5" >
           <button
             className="Dash-board-button"
             onClick={() => setShow("dashboard")}
